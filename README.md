@@ -15,7 +15,7 @@ A atividade pede quatro itens. Aqui estão os quatro, direto:
 | 3 | Link do repositório | [github.com/daniballester-ai/cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL) (este repositório) |
 | 4 | Vídeo de apresentação (pitch, até 10 min) | [`video/cacaufito-pitch.mp4`](video/cacaufito-pitch.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline) |
 
-O pitch segue o [roteiro de apresentação](docs/mira_pitch_script.md) (contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento), com trechos do código de treino narrados direto do notebook.
+O pitch segue o arco contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento, com trechos do código de treino narrados direto do notebook.
 
 ## Problema e tarefa de ML
 
@@ -49,9 +49,9 @@ Cacauicultores não têm hoje uma forma acessível de identificar pragas e doen�
 | Recall cssvd | 0,747 | 0,765 | +1,8 p.p. |
 | Precisão healthy | 0,701 | 0,718 | +1,7 p.p. |
 
-A busca do Optuna (10 trials, 5 completos + 5 interrompidos pelo pruner) encontrou `lr = 0,00142` e `weight_decay = 0,000126` como melhor combinação, próxima do valor manual original (`lr = 0,001`), o que valida a escolha inicial com evidência em vez de sorte. Custo: ~1h40 adicionais de GPU no Kaggle. Análise completa, incluindo o trade-off custo/benefício, no [roteiro de apresentação](docs/mira_pitch_script.md) (Bloco 5/6.1).
+A busca do Optuna (10 trials, 5 completos + 5 interrompidos pelo pruner) encontrou `lr = 0,00142` e `weight_decay = 0,000126` como melhor combinação, próxima do valor manual original (`lr = 0,001`), o que valida a escolha inicial com evidência em vez de sorte. Custo: ~1h40 adicionais de GPU no Kaggle.
 
-**Limitação reconhecida**: dataset pequeno e informal, coletado por terceiros (não é do Sul da Bahia); é um PoC, não um produto validado em campo. Detalhes em [`docs/limitations_and_next_steps.md`](docs/limitations_and_next_steps.md).
+**Limitação reconhecida**: dataset pequeno e informal, coletado por terceiros (não é do Sul da Bahia); é um PoC, não um produto validado em campo.
 
 ## Requisitos e casos de teste cobertos
 
@@ -87,10 +87,8 @@ src/inference_service/     API (predict, history, stats)
 frontend/                  upload + histórico
 models/                    modelo treinado + mapeamento de classes + relatório de avaliação
 samples/                   imagens de exemplo (uma por classe + caso incerto)
-data/amini/                manifesto do dataset (imagens não versionadas, ~9,6 GB)
 video/                     vídeo do pitch (entrega item 4)
-docs/                      canvas, escopo, limitações, relatório final, roteiro do pitch
-openspec/, specs/          especificações técnicas do sistema
+docs/                      ML/Data project canvas (entrega item 1)
 tests/                     suíte pytest
 ```
 
