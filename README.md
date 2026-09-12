@@ -10,16 +10,15 @@ A atividade pede quatro itens. Aqui estão os quatro, direto:
 
 | # | Item exigido | Onde está |
 |---|---|---|
-| 1 | ML/Data project canvas | [`docs/ml_canvas.md`](docs/ml_canvas.md) (também em [HTML](docs/ml_canvas.html) e [PDF](docs/cacaufito_canvas.pdf)) |
+| 1 | ML/Data project canvas | [`docs/ml_canvas.html`](docs/ml_canvas.html)  |
 | 2 | Notebook com passo a passo (markdown + código) | [`notebooks/train-kaggle-v2.ipynb`](notebooks/train-kaggle-v2.ipynb), rodado no Kaggle: [kaggle.com/code/danielleballester/train-kaggle-optuna](https://www.kaggle.com/code/danielleballester/train-kaggle-optuna/) |
 | 3 | Link do repositório | [github.com/daniballester-ai/cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL) (este repositório) |
-| 4 | Vídeo de apresentação (pitch, até 10 min) | [`video/cacaufito-pitch.mp4`](video/cacaufito-pitch.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline) |
+| 4 | Vídeo de apresentação (pitch, até 10 min) | [`video/cacaufito-pitch.mp4`](video/cacaufito-pitch.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline) [![Assistir no YouTube](https://img.youtube.com/vi/5YuKhI_38p4/maxresdefault.jpg)](https://www.youtube.com/watch?v=5YuKhI_38p4) |
 
-O pitch segue o arco contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento, com trechos do código de treino narrados direto do notebook.
 
 ## Problema e tarefa de ML
 
-Cacauicultores não têm hoje uma forma acessível de identificar pragas e doenças foliares do cacaueiro a partir de uma foto. Duas doenças graves, **CSSVD** e **antracnose**, reduzem produtividade e se espalham se não identificadas cedo. A tarefa é **classificação de imagem supervisionada**, com 3 classes mutuamente exclusivas (`healthy`, `cssvd`, `anthracnose`), a partir de uma foto de folha de cacau tirada em campo. Detalhes completos (fontes de dados, target, produtos de dados, direcionadores de pitch) estão no [ML Canvas](docs/ml_canvas.md).
+Cacauicultores não têm hoje uma forma acessível de identificar pragas e doenças foliares do cacaueiro a partir de uma foto. Duas doenças graves, **CSSVD** e **antracnose**, reduzem produtividade e se espalham se não identificadas cedo. A tarefa é **classificação de imagem supervisionada**, com 3 classes mutuamente exclusivas (`healthy`, `cssvd`, `anthracnose`), a partir de uma foto de folha de cacau tirada em campo. Detalhes completos (fontes de dados, target, produtos de dados, direcionadores de pitch) estão no [ML Canvas](docs/ml_canvas.html).
 
 ## Arquitetura (rede + pipeline)
 
@@ -94,4 +93,4 @@ tests/                     suíte pytest
 
 ## Autoria
 
-Danielle Magalhães Ballester ([danielleballester@gmail.com](mailto:danielleballester@gmail.com)) e Jales Anderson de Assis Monteiro ([jalesmonteiro@hotmail.com](mailto:jalesmonteiro@hotmail.com)), trabalho de PPGTI/UFRN.
+Danielle Magalhães Ballester ([danielleballester@gmail.com](mailto:danielleballester@gmail.com)), trabalho de PPGTI/UFRN.
