@@ -1,9 +1,0 @@
-{
-  "classes": [
-    "healthy",
-    "cssvd",
-    "anthracnose"
-  ],
-  "architecture": "efficientnet_b0",
-  "image_size": 224
-}
