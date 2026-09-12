@@ -4,8 +4,6 @@ Prova de conceito de visão computacional que classifica a condição fitossanit
 
 Repositório de entrega da disciplina **PPGTI3003 — Aprendizagem Profunda** (PPgTI/UFRN).
 
-> A camada de engenharia de software (Spec-Driven Development, specs formais, checkpoints humanos) é a entrega das disciplinas **Tópicos Avançados em Engenharia de Software 2** e **Desenvolvimento de Software com IA**, mantida no repositório irmão [cacau-fito](https://github.com/daniballester-ai/cacau-fito) — este repositório compartilha o mesmo código, mas com foco no modelo e no pitch.
-
 ## Entrega da disciplina
 
 A atividade pede quatro itens. Aqui estão os quatro, direto:
@@ -15,9 +13,9 @@ A atividade pede quatro itens. Aqui estão os quatro, direto:
 | 1 | ML/Data project canvas | [`docs/ml_canvas.md`](docs/ml_canvas.md) (também em [HTML](docs/ml_canvas.html) e [PDF](docs/cacaufito_canvas.pdf)) |
 | 2 | Notebook com passo a passo (markdown + código) | [`notebooks/train-kaggle-v2.ipynb`](notebooks/train-kaggle-v2.ipynb), rodado no Kaggle: [kaggle.com/code/danielleballester/train-kaggle-optuna](https://www.kaggle.com/code/danielleballester/train-kaggle-optuna/) |
 | 3 | Link do repositório | [github.com/daniballester-ai/cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL) (este repositório) |
-| 4 | Vídeo de apresentação (pitch, até 10 min) | [`decks/2026-09-11 cacaufito-pitch/pitch-video.mp4`](decks/2026-09-11%20cacaufito-pitch/pitch-video.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline); deck interativo em [`decks/2026-09-11 cacaufito-pitch/index.html`](decks/2026-09-11%20cacaufito-pitch/index.html) |
+| 4 | Vídeo de apresentação (pitch, até 10 min) | [`video/cacaufito-pitch.mp4`](video/cacaufito-pitch.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline) |
 
-O pitch segue o roteiro em [`docs/mira_pitch_script.md`](docs/mira_pitch_script.md) (contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento), com trechos do código de treino narrados direto do notebook.
+O pitch segue o [roteiro de apresentação](docs/mira_pitch_script.md) (contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento), com trechos do código de treino narrados direto do notebook.
 
 ## Problema e tarefa de ML
 
@@ -51,7 +49,7 @@ Cacauicultores não têm hoje uma forma acessível de identificar pragas e doen�
 | Recall cssvd | 0,747 | 0,765 | +1,8 p.p. |
 | Precisão healthy | 0,701 | 0,718 | +1,7 p.p. |
 
-A busca do Optuna (10 trials, 5 completos + 5 interrompidos pelo pruner) encontrou `lr = 0,00142` e `weight_decay = 0,000126` como melhor combinação, próxima do valor manual original (`lr = 0,001`), o que valida a escolha inicial com evidência em vez de sorte. Custo: ~1h40 adicionais de GPU no Kaggle. Análise completa, incluindo o trade-off custo/benefício, em [`docs/mira_pitch_script.md`](docs/mira_pitch_script.md) (Bloco 5/6.1) e na mudança arquivada em [`openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/`](openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/).
+A busca do Optuna (10 trials, 5 completos + 5 interrompidos pelo pruner) encontrou `lr = 0,00142` e `weight_decay = 0,000126` como melhor combinação, próxima do valor manual original (`lr = 0,001`), o que valida a escolha inicial com evidência em vez de sorte. Custo: ~1h40 adicionais de GPU no Kaggle. Análise completa, incluindo o trade-off custo/benefício, no [roteiro de apresentação](docs/mira_pitch_script.md) (Bloco 5/6.1).
 
 **Limitação reconhecida**: dataset pequeno e informal, coletado por terceiros (não é do Sul da Bahia); é um PoC, não um produto validado em campo. Detalhes em [`docs/limitations_and_next_steps.md`](docs/limitations_and_next_steps.md).
 
@@ -63,7 +61,7 @@ A regra de incerteza da API (`is_uncertain` / `uncertainty_reason`) e as demais 
 - `test_history.py` / `test_history_api.py` / `test_predict_history_integration.py`: gravação e leitura do histórico, retenção com expurgo do mais antigo, paginação, ordenação mais-recente-primeiro, histórico vazio não gera erro, falha ao gravar histórico não derruba `/predict`.
 - `test_stats.py` / `test_stats_api.py`: contagem por classe, distribuição desbalanceada, histórico vazio retorna zeros, e resposta 503 quando o armazenamento falha.
 
-Os mesmos três casos de uso ponta a ponta aparecem demonstrados com a aplicação real rodando no vídeo do pitch e no deck (slides "Uma foto, um diagnóstico confiante", "E quando o modelo está em dúvida?" e "Arquivo errado? Mensagem clara"): resultado confiante, resultado incerto sinalizado visualmente, e erro de entrada tratado sem quebrar a aplicação.
+Os mesmos três casos de uso ponta a ponta aparecem demonstrados com a aplicação real rodando no vídeo do pitch ("Uma foto, um diagnóstico confiante", "E quando o modelo está em dúvida?" e "Arquivo errado? Mensagem clara"): resultado confiante, resultado incerto sinalizado visualmente, e erro de entrada tratado sem quebrar a aplicação.
 
 ## Como rodar
 
@@ -90,9 +88,9 @@ frontend/                  upload + histórico
 models/                    modelo treinado + mapeamento de classes + relatório de avaliação
 samples/                   imagens de exemplo (uma por classe + caso incerto)
 data/amini/                manifesto do dataset (imagens não versionadas, ~9,6 GB)
-decks/                     deck de apresentação (Mira) e vídeo do pitch
+video/                     vídeo do pitch (entrega item 4)
 docs/                      canvas, escopo, limitações, relatório final, roteiro do pitch
-openspec/, specs/          especificações formais (OpenSpec e GitHub Spec Kit)
+openspec/, specs/          especificações técnicas do sistema
 tests/                     suíte pytest
 ```
 
