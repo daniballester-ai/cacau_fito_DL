@@ -2,32 +2,68 @@
 
 Prova de conceito de visão computacional que classifica a condição fitossanitária de uma folha de cacau — **sadia**, **CSSVD** (vírus do inchaço do broto) ou **antracnose** — a partir de uma foto, com uma API de inferência e um frontend de upload por trás.
 
-Repositório de entrega das disciplinas **Tópicos Avançados em Engenharia de Software 2** e **Desenvolvimento de Software com IA** (PPGTI/UFRN), com foco em **Spec-Driven Development (SDD)**: cada funcionalidade nova foi especificada antes de implementada, com aprovação humana em checkpoints definidos.
+Repositório de entrega da disciplina **PPGTI3003 — Aprendizagem Profunda** (PPgTI/UFRN).
 
-> O treino do modelo (notebook, canvas de ML, vídeo de pitch) é a entrega da disciplina **Aprendizagem Profunda**, mantida no repositório irmão [cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL) — este repositório compartilha o mesmo código, mas com foco em engenharia de software.
+> A camada de engenharia de software (Spec-Driven Development, specs formais, checkpoints humanos) é a entrega das disciplinas **Tópicos Avançados em Engenharia de Software 2** e **Desenvolvimento de Software com IA**, mantida no repositório irmão [cacau-fito](https://github.com/daniballester-ai/cacau-fito) — este repositório compartilha o mesmo código, mas com foco no modelo e no pitch.
 
-## O que tem aqui
+## Entrega da disciplina
 
-- **Modelo**: EfficientNet-B0 (transfer learning), treinado sobre o [Amini Cocoa Contamination Dataset](https://www.kaggle.com/datasets/ohagwucollinspatrick/amini-cocoa-contamination-dataset) (CC BY 4.0), 78,1% de acurácia no teste, com hiperparâmetros (`lr`, `weight_decay`) escolhidos por busca com Optuna. Notebook e detalhes de treino no repositório [cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL).
-- **API de inferência**: FastAPI (`src/inference_service/`) — `POST /predict`, `GET /history`, `GET /stats`, `GET /health`.
-- **Frontend**: upload de imagem + histórico de predições, servido pela própria API (`frontend/`).
-- **Specs**: todo o projeto foi especificado com SDD — [OpenSpec](openspec/) para o modelo, histórico de predições e sinalização de resultado incerto; [GitHub Spec Kit](specs/) para a feature de estatísticas (comparação em [`docs/comparacao_sdd_tools.md`](docs/comparacao_sdd_tools.md)).
-- **Docs**: [ML Canvas](docs/ml_canvas.md), [escopo e justificativa SDD](docs/escopo.md), [limitações e próximos passos](docs/limitations_and_next_steps.md), [checkpoint humano](docs/checkpoint_humano.md), [relatório final](docs/relatorio_final.md).
+A atividade pede quatro itens. Aqui estão os quatro, direto:
 
-## Checkpoint humano (SDD)
-
-Nenhum endpoint novo entra em produção só porque os testes automatizados passaram. Antes de expor um novo endpoint HTTP publicamente (merge para `main`), um humano do grupo revisa o diff gerado pelo agente e decide explicitamente: aprovar como está / editar / rejeitar e voltar à especificação. Detalhes em [`docs/checkpoint_humano.md`](docs/checkpoint_humano.md).
-
-## Requisitos funcionais cobertos por spec + testes
-
-| Funcionalidade | Spec | Testes |
+| # | Item exigido | Onde está |
 |---|---|---|
-| Classificação da folha (modelo + endpoint `/predict`) | [`openspec/specs/leaf-disease-classifier`](openspec/specs/leaf-disease-classifier/), [`leaf-inference-service`](openspec/specs/leaf-inference-service/) | — |
-| Upload no frontend | [`openspec/specs/leaf-upload-frontend`](openspec/specs/leaf-upload-frontend/) | — |
-| Sinalização de resultado incerto (`is_uncertain`) | mudança arquivada em `openspec/changes/archive/` | `tests/test_uncertainty.py` |
-| Histórico de predições (paginado, com retenção) | [`openspec/specs/prediction-history`](openspec/specs/prediction-history/) | `tests/test_history*.py` |
-| Estatísticas agregadas (`GET /stats`) | [`specs/001-prediction-stats`](specs/001-prediction-stats/) (Spec Kit) | `tests/test_stats*.py` |
-| Otimização de hiperparâmetros do treino (Optuna) | mudança arquivada em [`openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/`](openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/) | verificação manual no notebook (ver repo DL) |
+| 1 | ML/Data project canvas | [`docs/ml_canvas.md`](docs/ml_canvas.md) (também em [HTML](docs/ml_canvas.html) e [PDF](docs/cacaufito_canvas.pdf)) |
+| 2 | Notebook com passo a passo (markdown + código) | [`notebooks/train-kaggle-v2.ipynb`](notebooks/train-kaggle-v2.ipynb), rodado no Kaggle: [kaggle.com/code/danielleballester/train-kaggle-optuna](https://www.kaggle.com/code/danielleballester/train-kaggle-optuna/) |
+| 3 | Link do repositório | [github.com/daniballester-ai/cacau_fito_DL](https://github.com/daniballester-ai/cacau_fito_DL) (este repositório) |
+| 4 | Vídeo de apresentação (pitch, até 10 min) | [`decks/2026-09-11 cacaufito-pitch/pitch-video.mp4`](decks/2026-09-11%20cacaufito-pitch/pitch-video.mp4), narrado, cobrindo requisitos, casos de teste e arquitetura (rede + pipeline); deck interativo em [`decks/2026-09-11 cacaufito-pitch/index.html`](decks/2026-09-11%20cacaufito-pitch/index.html) |
+
+O pitch segue o roteiro em [`docs/mira_pitch_script.md`](docs/mira_pitch_script.md) (contextualização → dataset → arquitetura → transfer learning → Optuna → benchmark → resultados → demo → encerramento), com trechos do código de treino narrados direto do notebook.
+
+## Problema e tarefa de ML
+
+Cacauicultores não têm hoje uma forma acessível de identificar pragas e doenças foliares do cacaueiro a partir de uma foto. Duas doenças graves, **CSSVD** e **antracnose**, reduzem produtividade e se espalham se não identificadas cedo. A tarefa é **classificação de imagem supervisionada**, com 3 classes mutuamente exclusivas (`healthy`, `cssvd`, `anthracnose`), a partir de uma foto de folha de cacau tirada em campo. Detalhes completos (fontes de dados, target, produtos de dados, direcionadores de pitch) estão no [ML Canvas](docs/ml_canvas.md).
+
+## Arquitetura (rede + pipeline)
+
+```text
+┌──────────┐    ┌──────────────────┐    ┌────────────┐    ┌──────────┐    ┌─────┐    ┌─────┐
+│  Dados   │ -> │ Treino (+ busca  │ -> │ Avaliação  │ -> │ Artefato │ -> │ API │ -> │ App │
+│ (Kaggle) │    │ Optuna)          │    │ (teste)    │    │ (.pt)    │    │     │    │     │
+└──────────┘    └──────────────────┘    └────────────┘    └──────────┘    └─────┘    └─────┘
+```
+
+- **Dados**: [Amini Cocoa Contamination Dataset](https://www.kaggle.com/datasets/ohagwucollinspatrick/amini-cocoa-contamination-dataset) (Kaggle, CC BY 4.0), 5.529 imagens rotuladas, split 70/15/15 estratificado (treino/validação/teste), sem sobreposição entre conjuntos.
+- **Rede**: **EfficientNet-B0** pré-treinada (ImageNet), com o backbone convolucional **congelado**; só a camada final (`Linear(1280 → 3)`) é treinada, transfer learning apropriado para um dataset de porte médio e uma GPU única.
+- **Otimização de hiperparâmetros**: busca sistemática com **Optuna** (TPE + `MedianPruner`) sobre `learning rate` e `weight_decay`, em vez de valores fixos escolhidos manualmente. Ver "Resultados" abaixo para o ganho medido.
+- **Avaliação**: métricas por classe (precisão/recall/F1) no conjunto de teste, com sinalização explícita quando uma classe tem poucas amostras de teste (piso de confiabilidade documentado).
+- **Serviço de inferência**: FastAPI (`src/inference_service/`) carrega o artefato do modelo e expõe `POST /predict`, retornando o rótulo previsto, a confiança, e uma **flag de incerteza** (`is_uncertain`) quando a confiança é baixa ou há disputa acirrada entre as duas classes mais prováveis.
+- **Frontend**: página de upload sem login (`frontend/`), que mostra o resultado e destaca visualmente quando ele é incerto.
+
+## Resultados
+
+| Métrica | Sem Optuna (`train_kaggle_v1.ipynb`) | Com Optuna (`train-kaggle-v2.ipynb`, versão final) | Δ |
+|---|---|---|---|
+| Acurácia no teste | 0,778 | **0,781** | +0,3 p.p. |
+| Melhor acurácia de validação | 0,799 | 0,802 | +0,3 p.p. |
+| F1 healthy | 0,765 | 0,768 | +0,3 p.p. |
+| F1 cssvd | 0,780 | 0,779 | −0,1 p.p. |
+| F1 anthracnose | 0,794 | 0,799 | +0,5 p.p. |
+| Recall cssvd | 0,747 | 0,765 | +1,8 p.p. |
+| Precisão healthy | 0,701 | 0,718 | +1,7 p.p. |
+
+A busca do Optuna (10 trials, 5 completos + 5 interrompidos pelo pruner) encontrou `lr = 0,00142` e `weight_decay = 0,000126` como melhor combinação, próxima do valor manual original (`lr = 0,001`), o que valida a escolha inicial com evidência em vez de sorte. Custo: ~1h40 adicionais de GPU no Kaggle. Análise completa, incluindo o trade-off custo/benefício, em [`docs/mira_pitch_script.md`](docs/mira_pitch_script.md) (Bloco 5/6.1) e na mudança arquivada em [`openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/`](openspec/changes/archive/2026-09-11-add-optuna-tuning-notebook/).
+
+**Limitação reconhecida**: dataset pequeno e informal, coletado por terceiros (não é do Sul da Bahia); é um PoC, não um produto validado em campo. Detalhes em [`docs/limitations_and_next_steps.md`](docs/limitations_and_next_steps.md).
+
+## Requisitos e casos de teste cobertos
+
+A regra de incerteza da API (`is_uncertain` / `uncertainty_reason`) e as demais funcionalidades novas (histórico de predições, estatísticas agregadas) são cobertas por testes automatizados em `tests/`:
+
+- `test_uncertainty.py`: confiança alta não é sinalizada; confiança baixa é (`low_confidence`); disputa acirrada entre as duas classes mais prováveis é (`close_call`); os dois critérios podem coexistir.
+- `test_history.py` / `test_history_api.py` / `test_predict_history_integration.py`: gravação e leitura do histórico, retenção com expurgo do mais antigo, paginação, ordenação mais-recente-primeiro, histórico vazio não gera erro, falha ao gravar histórico não derruba `/predict`.
+- `test_stats.py` / `test_stats_api.py`: contagem por classe, distribuição desbalanceada, histórico vazio retorna zeros, e resposta 503 quando o armazenamento falha.
+
+Os mesmos três casos de uso ponta a ponta aparecem demonstrados com a aplicação real rodando no vídeo do pitch e no deck (slides "Uma foto, um diagnóstico confiante", "E quando o modelo está em dúvida?" e "Arquivo errado? Mensagem clara"): resultado confiante, resultado incerto sinalizado visualmente, e erro de entrada tratado sem quebrar a aplicação.
 
 ## Como rodar
 
@@ -36,7 +72,7 @@ python -m pip install fastapi "uvicorn[standard]" python-multipart torch torchvi
 python -m uvicorn src.inference_service.main:app --reload
 ```
 
-Abra `http://127.0.0.1:8000` no navegador. Imagens de exemplo em [`samples/`](samples/).
+Abra `http://127.0.0.1:8000` no navegador. Imagens de exemplo (uma por classe, mais um caso incerto) em [`samples/`](samples/).
 
 ## Testes
 
@@ -48,14 +84,16 @@ python -m pytest tests/ -v
 ## Estrutura
 
 ```text
-src/inference_service/   API (predict, history, stats)
-frontend/                 upload + histórico
-models/                   modelo treinado + mapeamento de classes
-notebooks/                notebooks de treino (detalhados no repo cacau_fito_DL)
-data/amini/                manifesto do dataset (imagens não versionadas, 9.6GB)
-openspec/, specs/         especificações (OpenSpec e Spec Kit)
-docs/                      canvas, escopo, limitações, comparação de ferramentas, relatório final
-tests/                    suíte pytest
+notebooks/                 notebooks de treino (Kaggle): v1 (baseline) e v2 (com Optuna, final)
+src/inference_service/     API (predict, history, stats)
+frontend/                  upload + histórico
+models/                    modelo treinado + mapeamento de classes + relatório de avaliação
+samples/                   imagens de exemplo (uma por classe + caso incerto)
+data/amini/                manifesto do dataset (imagens não versionadas, ~9,6 GB)
+decks/                     deck de apresentação (Mira) e vídeo do pitch
+docs/                      canvas, escopo, limitações, relatório final, roteiro do pitch
+openspec/, specs/          especificações formais (OpenSpec e GitHub Spec Kit)
+tests/                     suíte pytest
 ```
 
 ## Autoria
